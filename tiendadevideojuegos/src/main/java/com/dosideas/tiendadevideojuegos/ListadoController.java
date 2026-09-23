@@ -10,9 +10,12 @@ import java.util.List;
 @Controller
 public class ListadoController {
     private final VideojuegoRepository videojuegoRepository;
+    private final CarritoItemRepository carritoItemRepository;
 
-    public ListadoController(VideojuegoRepository videojuegoRepository) {
+    public ListadoController(VideojuegoRepository videojuegoRepository,
+            CarritoItemRepository carritoItemRepository) {
         this.videojuegoRepository = videojuegoRepository;
+        this.carritoItemRepository = carritoItemRepository;
     }
 
     @GetMapping("/listado")
@@ -23,6 +26,10 @@ public class ListadoController {
 
         model.addAttribute("videojuegos", videojuegos);
         model.addAttribute("busqueda", q);
+        model.addAttribute("carrito", carritoItemRepository.findAll());
+        model.addAttribute("totalProductos", carritoItemRepository.findAll().stream()
+            .mapToInt(CarritoItem::getCantidad)
+            .sum());
         return "listado";
     }
 }

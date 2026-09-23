@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <!-- Required meta tags -->
@@ -11,6 +11,22 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>Tienda VJ</title>
+    <style>
+        .game-card {
+            margin-bottom: 1.5rem;
+        }
+
+        .game-card .card-img-top {
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .cart-item img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,10 +41,14 @@
             <form class="d-flex ms-auto mt-2 mt-lg-0" th:action="@{/listado}" method="get">
                 <label for="busquedaVideojuegos" class="visually-hidden">Buscar videojuegos</label>
                 <input type="search" id="busquedaVideojuegos" class="form-control"
-                    name="q" th:value="${busqueda}" placeholder="Buscar videojuegos..."
+                    name="q" th:value="${busqueda}" placeholder="Buscar..."
                     aria-label="Buscar videojuegos" autocomplete="off">
                 <button type="submit" class="btn btn-primary ms-2">Buscar</button>
             </form>
+            <button type="button" class="btn btn-outline-light ms-lg-3 mt-2 mt-lg-0" data-bs-toggle="modal"
+                data-bs-target="#carritoModal" aria-label="Abrir carrito">
+                Carrito <span class="badge bg-danger" th:text="${totalProductos}">0</span>
+            </button>
         </div>
     </nav>
 
@@ -41,7 +61,11 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${videojuego.titulo}">Videojuego</h5>
                         <p class="card-text" th:text="${videojuego.descripcion}">Descripcion</p>
-                        <a href="#" class="btn btn-primary">Ver detalles</a>
+                        <form th:action="@{/carrito/agregar/{id}(id=${videojuego.id})}" method="post">
+                            <button type="submit" class="btn btn-primary">
+                            Agregar al carrito
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -49,6 +73,44 @@
         <p th:if="${#lists.isEmpty(videojuegos)}" class="text-center text-muted mt-4">
             No se encontraron videojuegos.
         </p>
+    </div>
+
+    <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="carritoModalLabel">Tu carrito</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div th:if="${#lists.isEmpty(carrito)}" class="text-center text-muted">
+                        El carrito está vacío.
+                    </div>
+                    <div th:each="item : ${carrito}" class="cart-item d-flex align-items-center gap-2 border-bottom pb-2 mb-2">
+                        <img th:src="${item.videojuego.imagenUrl}" th:alt="${item.videojuego.titulo}" class="rounded">
+                        <div class="flex-grow-1">
+                            <div class="fw-bold" th:text="${item.videojuego.titulo}">Videojuego</div>
+                            <small class="text-muted">Cantidad: <span th:text="${item.cantidad}">1</span></small>
+                        </div>
+                        <form th:action="@{/carrito/{id}/disminuir(id=${item.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Quitar una unidad">-</button>
+                        </form>
+                        <form th:action="@{/carrito/{id}/aumentar(id=${item.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-primary" aria-label="Agregar una unidad">+</button>
+                        </form>
+                        <form th:action="@{/carrito/{id}/eliminar(id=${item.id})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Eliminar del carrito">&times;</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <form th:action="@{/carrito/vaciar}" method="post">
+                        <button type="submit" class="btn btn-outline-danger">Vaciar carrito</button>
+                    </form>
+                    <span class="fw-bold">Productos: <span th:text="${totalProductos}">0</span></span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
