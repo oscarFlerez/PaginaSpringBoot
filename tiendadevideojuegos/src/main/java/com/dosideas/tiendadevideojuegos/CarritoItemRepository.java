@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface CarritoItemRepository extends JpaRepository<CarritoItem, Long> {
     Optional<CarritoItem> findByVideojuegoId(Long videojuegoId);
+
+    void deleteByVideojuegoId(Long videojuegoId);
 }

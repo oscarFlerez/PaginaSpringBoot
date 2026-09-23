@@ -39,4 +39,10 @@ public class Videojuego {
     public String getImagenUrl() {
         return imagenUrl;
     }
+
+    public void actualizar(String titulo, String descripcion, String imagenUrl) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.imagenUrl = imagenUrl;
+    }
 }

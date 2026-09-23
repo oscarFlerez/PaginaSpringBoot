@@ -18,6 +18,11 @@ public class ListadoController {
         this.carritoItemRepository = carritoItemRepository;
     }
 
+    @GetMapping("/")
+    public String inicio() {
+        return "redirect:/listado";
+    }
+
     @GetMapping("/listado")
     public String listado(@RequestParam(defaultValue = "") String q, Model model) {
         List<Videojuego> videojuegos = q.isBlank()
