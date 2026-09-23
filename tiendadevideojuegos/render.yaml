@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: tienda-videojuegos
+    runtime: docker
+    plan: free
+    region: virginia
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /listado
