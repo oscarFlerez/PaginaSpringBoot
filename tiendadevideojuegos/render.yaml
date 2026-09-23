@@ -1,3 +1,10 @@
+databases:
+  - name: tienda-videojuegos-db
+    databaseName: tienda_videojuegos
+    user: tienda_user
+    plan: free
+    region: virginia
+
 services:
   - type: web
     name: tienda-videojuegos
@@ -7,3 +14,26 @@ services:
     branch: main
     dockerfilePath: ./Dockerfile
     healthCheckPath: /listado
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: DB_HOST
+        fromDatabase:
+          name: tienda-videojuegos-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: tienda-videojuegos-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: tienda-videojuegos-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: tienda-videojuegos-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: tienda-videojuegos-db
+          property: password
