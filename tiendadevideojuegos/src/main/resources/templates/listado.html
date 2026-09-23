@@ -15,8 +15,9 @@
     <style>
         body {
             min-height: 100vh;
+            background-color: #ffffff;
             background-image: linear-gradient(rgba(10, 14, 24, 0.48), rgba(10, 14, 24, 0.48)),
-                var(--catalog-background, url("/img/imagenDeFondo2.jpg"));
+                url("/img/imagenDeFondo2.jpg");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -142,15 +143,15 @@
                 <div class="modal-body">
                     <p class="text-muted">Elige la imagen de fondo de la tienda.</p>
                     <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary"
-                            data-background="/img/imagenDeFondo2.jpg">
-                            Fondo actual
-                        </button>
-                        <button type="button" class="btn btn-primary"
+                        <button type="button" class="btn btn-primary background-option"
                             data-background="/img/imagenDeFondo.jpg">
+                            Fondo principal
+                        </button>
+                        <button type="button" class="btn btn-primary background-option"
+                            data-background="/img/imagenDeFondo2.jpg">
                             Fondo alternativo
                         </button>
-                        <button type="button" class="btn btn-primary"
+                        <button type="button" class="btn btn-primary background-option"
                             data-background="/img/imagenDeFondo3.jpg">
                             Fondo 3
                         </button>
@@ -176,8 +177,13 @@
         const defaultBackground = "/img/imagenDeFondo2.jpg";
 
         function applyBackground(background) {
-            const backgroundValue = background === "none" ? "none" : `url("${background}")`;
-            document.documentElement.style.setProperty("--catalog-background", backgroundValue);
+            if (background === "none") {
+                document.body.style.backgroundColor = "#ffffff";
+                document.body.style.backgroundImage = "none";
+            } else {
+                document.body.style.backgroundColor = "#ffffff";
+                document.body.style.backgroundImage = `linear-gradient(rgba(10, 14, 24, 0.48), rgba(10, 14, 24, 0.48)), url("${background}")`;
+            }
             localStorage.setItem(backgroundStorageKey, background);
         }
 
